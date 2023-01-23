@@ -4,12 +4,12 @@ bool Cylinder::Intersect(Ray &ray, double *results)
 {
     Rotator rotator;
     Point direction;
-    double angle;
     Point rayOrigin = ray.origin - center;
-    Point rayDirection = ray.direction - center;
+    Point rayDirection = ray.direction;
+    double angle = acos(rayDirection.z / sqrt(rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y + rayDirection.z * rayDirection.z));
     rotator.SetTransformation(direction, angle);
-    Point rayOrigin = rotator.Transform(ray.origin);
-    Point rayDirection = rotator.Transform(ray.direction);
+    rayOrigin = rotator.Transform(ray.origin);
+    rayDirection = rotator.Transform(ray.direction);
 
     double a = rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y;
     double b = 2.0 * (rayOrigin.x * rayDirection.x + rayOrigin.y * rayDirection.y);
@@ -47,28 +47,37 @@ bool Cylinder::Intersect(Ray &ray, double *results)
         else if (abs(delta) < tol)
         {
             t1 = t2 = -b / (2 * a);
-        } else {
+        }
+        else
+        {
             double temp = sqrt(delta);
-            t1 = (-b - temp) / (2*a);
-            t2 = (-b + temp) / (2*a);
+            t1 = (-b - temp) / (2 * a);
+            t2 = (-b + temp) / (2 * a);
         }
     }
 
     double partial1 = rayOrigin.z + t1 * rayDirection.z;
     double partial2 = rayOrigin.z + t2 * rayDirection.z;
 
-    if(abs(partial1) > height) {
+    if (abs(partial1) > height)
+    {
         t1 = (height - partial1) / rayDirection.z;
     }
-    if(abs(partial2) > height) {
+    if (abs(partial2) > height)
+    {
         t2 = (height - partial2) / rayDirection.z;
     }
 
-    if(t1 >= 0) {
+    if (t1 >= 0)
+    {
         *results = partial1;
-    } else if(t2 >= 0){
+    }
+    else if (t2 >= 0)
+    {
         *results = partial2;
-    } else {
+    }
+    else
+    {
         *results = 0.0;
         hit = false;
     }

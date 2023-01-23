@@ -1,6 +1,8 @@
 #pragma once
 #include "graphics.hpp"
 
+class Mesh;
+
 class Ray {
 private:
 

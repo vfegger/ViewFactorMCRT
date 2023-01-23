@@ -1,8 +1,10 @@
 #pragma once
 #include "structures.hpp"
 #include "transformers.hpp"
-#include "../../ray-tracing/include/ray.hpp"
+#include "ray.hpp"
 #include <cmath>
+
+class Ray;
 
 class Mesh
 {
@@ -10,7 +12,7 @@ public:
     virtual bool Intersect(Ray &ray, double *results) = 0;
 };
 
-class Cylinder : Mesh
+class Cylinder : public Mesh
 {
 protected:
     Point direction;
