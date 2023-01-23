@@ -1,5 +1,5 @@
 #pragma once
-#include "../../graphics/include/graphics.hpp"
+#include "graphics.hpp"
 
 class Ray {
 private:
