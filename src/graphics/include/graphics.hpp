@@ -21,5 +21,6 @@ protected:
     double height;
 
 public:
+    Cylinder(Point direction, Point center, double radius, double height);
     bool Intersect(Ray &ray, double *results) override;
 };
