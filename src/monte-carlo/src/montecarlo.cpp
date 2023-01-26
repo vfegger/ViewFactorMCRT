@@ -1,6 +1,6 @@
 #include "../include/montecarlo.hpp"
 
-double MonteCarlo::Simulate(bool (*f)(std::default_random_engine &), long long unsigned length)
+double MonteCarlo::Simulate(std::function<bool(std::default_random_engine &)> f, long long unsigned length)
 {
     std::default_random_engine generator(seed);
     long long unsigned acc = 0u;
@@ -8,5 +8,5 @@ double MonteCarlo::Simulate(bool (*f)(std::default_random_engine &), long long u
     {
         acc += (f(generator)) ? 1llu : 0llu;
     }
-    return ((double) acc) / ((double) length);
+    return ((double)acc) / ((double)length);
 }

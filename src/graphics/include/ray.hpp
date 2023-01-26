@@ -3,11 +3,12 @@
 
 class Mesh;
 
-class Ray {
+class Ray
+{
 private:
-
 public:
     Point origin;
     Point direction;
-    bool Intersect(Mesh* meshes, unsigned length, double& result);
+    Ray(Point origin, Point direction) : origin(origin), direction(direction) {}
+    bool Intersect(Mesh *meshes, unsigned length, double &result);
 };

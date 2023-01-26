@@ -3,6 +3,7 @@
 #include "transformers.hpp"
 #include "ray.hpp"
 #include <cmath>
+#include <iostream>
 
 class Ray;
 
@@ -21,6 +22,6 @@ protected:
     double height;
 
 public:
-    Cylinder(Point direction, Point center, double radius, double height);
+    Cylinder(Point direction, Point center, double radius, double height) : direction(direction), center(center), radius(radius), height(height) {}
     bool Intersect(Ray &ray, double *results) override;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <random>
+#include <functional>
 
 class MonteCarlo
 {
@@ -9,5 +10,5 @@ private:
 
 public:
     MonteCarlo(long long unsigned seed) : seed(seed) {}
-    double Simulate(bool (*f)(std::default_random_engine &), long long unsigned length);
+    double Simulate(std::function<bool(std::default_random_engine &)> f, long long unsigned length);
 };
