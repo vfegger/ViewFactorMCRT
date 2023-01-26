@@ -1,9 +1,9 @@
 #pragma once
+#include <cmath>
+#include <iostream>
 #include "structures.hpp"
 #include "transformers.hpp"
 #include "ray.hpp"
-#include <cmath>
-#include <iostream>
 
 class Ray;
 

@@ -89,12 +89,8 @@ public:
         k = kImg;
         return *this;
     }
-    Quaternion &operator!()
+    Quaternion operator!()
     {
-        r = r;
-        i = -i;
-        j = -j;
-        k = -k;
-        return *this;
+        return Quaternion(r,-i,-j,-k);
     }
 };
