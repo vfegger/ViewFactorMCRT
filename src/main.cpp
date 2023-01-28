@@ -37,8 +37,6 @@ public:
         direction *= 1.0 / sqrt(temp);
 
         Ray ray(origin, direction);
-        ray.origin = Point(0,0,10);
-        //std::cout << "Direction: " << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << "\n";
 
         Mesh *worldMesh = &base;
 
@@ -56,10 +54,10 @@ int main()
 
     Point cylinderDirection = Point(1, 0, 0);
     Point cylinderCenter = Point(0, 0, 0);
-    double cylinderRadius = 1.0;
-    double cylinderHeight = 1.0;
-    Point emitterCenter = Point(0, 0, 10);
-    Point emitterArea = Point(1, 1, 0);
+    double cylinderRadius = 0.169;
+    double cylinderHeight = 0.405;
+    Point emitterCenter = Point(0, 0, 0.174);
+    Point emitterArea = Point(0.6, 0.3, 0);
     World world(cylinderDirection, cylinderCenter, cylinderRadius, cylinderHeight, emitterCenter, emitterArea);
 
     auto fp = std::bind(&World::View, world, std::placeholders::_1);
