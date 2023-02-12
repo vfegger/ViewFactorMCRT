@@ -21,7 +21,17 @@ protected:
     double radius;
     double height;
 
+    // Subdivisions
+    unsigned Lr, Lth, Lz;
+
+    long long unsigned collisionCount;
+    long long unsigned* collision;
+
 public:
-    Cylinder(Point direction, Point center, double radius, double height) : direction(direction), center(center), radius(radius), height(height) {}
+    Cylinder(Point direction, Point center, double radius, double height) : direction(direction), center(center), radius(radius), height(height), Lr(0u), Lth(0u), Lz(0u), collisionCount(0u), collision(NULL) {}
     bool Intersect(Ray &ray, double *results) override;
+    void SetupCollision(unsigned Lr, unsigned Lth, unsigned Lz);
+    long long unsigned GetCollision();
+    long long unsigned GetCollision(unsigned Lr, unsigned Lth, unsigned Lz);
+    void DeleteCollision();
 };
