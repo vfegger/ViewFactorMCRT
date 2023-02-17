@@ -1,10 +1,11 @@
 #include <iostream>
-#include <fstream> 
+#include <fstream>
 #include <iomanip>
 #include <random>
 #include <functional>
 #include "graphics.hpp"
 #include "montecarlo.hpp"
+#include "parser.hpp"
 
 class World
 {
@@ -14,18 +15,14 @@ public:
     Point emitterCenter;
     Point emitterArea;
 
-    std::fstream fs;
-
     World(Point baseDirection, Point baseCenter, double baseRadius, double baseHeight, Point emitterCenter, Point emitterArea) : base(baseDirection, baseCenter, baseRadius, baseHeight), emitterCenter(emitterCenter), emitterArea(emitterArea) {}
     void SetupWorld(unsigned Lr, unsigned Lth, unsigned Lz)
     {
         base.SetupCollision(Lr, Lth, Lz);
-        fs.open("points.dat", std::fstream::in | std::fstream::out | std::fstream::trunc);
     }
     void DeleteWorld()
     {
         base.DeleteCollision();
-        fs.close();
     }
     bool View(std::default_random_engine &generator)
     {
@@ -57,56 +54,73 @@ public:
         bool hit = ray.Intersect(worldMesh, 1, result);
 
         Point col = origin + result * direction;
-        fs << direction.x << " " << direction.y << " " << direction.z << " " << hit << " " << col.x << " " << col.y << " " << col.z << "\n";
 
-        // std::cout << "Value t: " << result << " Hit: " << hit << "\n";
         return hit;
     }
 };
 
-int main()
+void Problem(unsigned Lr, unsigned Lth, unsigned Lz, double *collisions)
 {
-    std::cout << "MCRT View Factor Estimation\n";
-
     Point cylinderDirection = Point(1, 0, 0);
     Point cylinderCenter = Point(0, 0, 0);
     double cylinderRadius = 0.0845;
     double cylinderHeight = 0.405;
     Point emitterCenter = Point(0, 0, 0.2585);
     Point emitterArea = Point(0.3, 0.15, 0);
-    emitterArea = Point(0.0, 0.0, 0.0);
-
-    unsigned Lr = 1u;
-    unsigned Lth = 36u;
-    unsigned Lz = 16u;
 
     World world(cylinderDirection, cylinderCenter, cylinderRadius, cylinderHeight, emitterCenter, emitterArea);
-    world.SetupWorld(Lr,Lth,Lz);
+    world.SetupWorld(Lr, Lth, Lz);
 
     auto fp = std::bind(&World::View, std::ref(world), std::placeholders::_1);
 
-    long long unsigned simulationNumber = 1000000llu;
+    long long unsigned simulationNumber = 1llu << 27llu;
     long long unsigned seed = 1234u;
     std::cout << "Monte Carlo Method with " << simulationNumber << " elements and seed " << seed << "\n";
     MonteCarlo monteCarlo(seed);
     double result = monteCarlo.Simulate(fp, simulationNumber);
-    std::cout << "Result: " << result << "\n";
+    std::cout << "Result by Monte Carlo method: " << result << "\n";
     unsigned totalCollision = world.base.GetCollision();
     std::cout << "Total Collisions: " << totalCollision << "\n";
-    std::cout << "Intenal Result: " << ((double)totalCollision) / simulationNumber << "\n\n";
-    std::cout << "Value per cell:\n";
-    std::cout << std::setprecision(1);
-    unsigned *collisions = new unsigned[Lth * Lz];
-    for (unsigned j = 0u; j < Lth; j++)
+    std::cout << "Total View Factor: " << ((double)totalCollision) / simulationNumber << "\n\n";
+    for (unsigned k = 0u; k < Lz; k++)
     {
-        for (unsigned k = 0u; k < Lz; k++)
+        for (unsigned j = 0u; j < Lth; j++)
         {
-            std::cout << std::scientific << ((double)world.base.GetCollision(0u, j, k)) / totalCollision << " ";
+            collisions[k * Lth + j] = ((double)world.base.GetCollision(0u, j, k)) / ((double)totalCollision);
         }
-        std::cout << "\n";
     }
-
     world.DeleteWorld();
+}
+
+int main()
+{
+    std::cout << "MCRT View Factor Estimation\n";
+
+    unsigned Lr = 1u;
+    unsigned Lth = 36u;
+    unsigned Lz = 16u;
+    double *collisions = new double[Lth * Lz];
+
+    Problem(Lr, Lth, Lz, collisions);
+
+    std::string path_dir = std::filesystem::current_path().string();
+    std::string path_binary_out = path_dir + "/data/binary/";
+    std::string path_text_out = path_dir + "/data/text/";
+    std::string name_viewFactor = "viewFactor";
+    std::string extension_text = ".dat";
+    std::string extension_binary = ".bin";
+
+    Parser *parser = new Parser(2u);
+    unsigned index = parser->OpenFileOut(path_binary_out, name_viewFactor, extension_binary, std::ios::binary);
+    std::streampos position;
+    Parser::ExportConfigurationBinary(parser->GetStreamOut(index), "View Factor", Lth * Lz, ParserType::Double, position);
+
+    Parser::ExportValuesBinary(parser->GetStreamOut(index), Lth * Lz, ParserType::Double, collisions, position, 0u);
+
+    Parser::ConvertToText(path_binary_out,path_text_out,extension_text);
+
+    delete parser;
+    delete[] collisions;
 
     return 0;
 }

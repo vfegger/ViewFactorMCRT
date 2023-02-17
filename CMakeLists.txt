@@ -10,8 +10,9 @@ set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
 # Add Libraries
 add_subdirectory(${source_path}/graphics)
 add_subdirectory(${source_path}/monte-carlo)
+add_subdirectory(${source_path}/parser)
 
 # Add the executable
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Graphics MonteCarlo)
+target_link_libraries(${PROJECT_NAME} PUBLIC Graphics MonteCarlo Parser)

@@ -119,7 +119,6 @@ bool Cylinder::Intersect(Ray &ray, double *results)
             }
             else
             {
-                std::cout << r / radius << " " << th / (2.0 * std::acos(-1.0)) << " " << z / (2.0 * height) << "\n";
                 th = th * Lth / (2.0 * std::acos(-1.0));
                 z = z * Lz / (2.0 * height);
                 collision[((unsigned)z) * Lth + ((unsigned)th)] += 1u;

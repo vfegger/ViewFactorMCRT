@@ -51,6 +51,7 @@
         "xutility": "cpp",
         "iomanip": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "fstream": "cpp"
     }
 }
