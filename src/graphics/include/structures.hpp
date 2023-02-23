@@ -91,6 +91,6 @@ public:
     }
     Quaternion operator!()
     {
-        return Quaternion(r,-i,-j,-k);
+        return Quaternion(r, -i, -j, -k);
     }
 };

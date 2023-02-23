@@ -12,7 +12,8 @@ bool solveq(double a, double b, double c, double &t1, double &t2, double tol = 0
         delta = std::sqrt(delta);
         t1 = (-b + delta) / (2.0 * a);
         t2 = (-b - delta) / (2.0 * a);
-        if(t2 < t1) {
+        if (t2 < t1)
+        {
             delta = t2;
             t2 = t1;
             t1 = delta;
@@ -111,7 +112,8 @@ bool Cylinder::Intersect(Ray &ray, double *results)
 
             if (z >= 2.0 * height || z <= 0.0)
             {
-                std::cout << "\n"<< t1 << " " << t2 << "\n";
+                std::cout << "\n";
+                std::cout << t1 << " " << t2 << "\n";
                 std::cout << rayOrigin.x << " " << rayOrigin.y << " " << rayOrigin.z << "\n";
                 std::cout << rayDirection.x << " " << rayDirection.y << " " << rayDirection.z << "\n";
                 std::cout << r / radius << " " << th / (2.0 * std::acos(-1.0)) << " " << z / (2.0 * height) << "\n";

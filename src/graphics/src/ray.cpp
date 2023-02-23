@@ -3,7 +3,7 @@
 bool Ray::Intersect(Mesh *meshes, unsigned length, double& result)
 {
     double *results = new double[length];
-    double value = -1.0;
+    double value = 0.0;
     unsigned index = 0u;
     bool hit = false;
     for (unsigned i = 0u; i < length; i++)
