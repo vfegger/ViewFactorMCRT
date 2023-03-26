@@ -5,7 +5,7 @@
 #include <functional>
 #include "graphics.hpp"
 #include "montecarlo.hpp"
-#include "parser.hpp"
+#include "Parser.hpp"
 
 class World
 {
