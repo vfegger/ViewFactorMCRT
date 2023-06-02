@@ -132,7 +132,8 @@ int main()
     std::string path_dir = std::filesystem::current_path().string();
     std::string path_binary_out = path_dir + "/data/binary/";
     std::string path_text_out = path_dir + "/data/text/";
-    std::string name_viewFactor = "viewFactor";
+    std::string name_viewFactor = "ViewFactor";
+    name_viewFactor += "Th" + std::to_string(Lth) + "Z" + std::to_string(Lz);
     std::string extension_text = ".dat";
     std::string extension_binary = ".bin";
 
