@@ -23,5 +23,6 @@ bool Ray::Intersect(Mesh *meshes, unsigned length, double& result)
         }
     }
     result = value;
+    delete[] results;
     return hit;
 }
