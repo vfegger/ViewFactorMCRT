@@ -7,6 +7,11 @@
 #include "montecarlo.hpp"
 #include "Parser.hpp"
 
+void PrintPoint(Point point, std::string name = "")
+{
+    std::cout << name << " X = " << point.x << "; Y = " << point.y << "; Z = " << point.z << "\n";
+}
+
 class World
 {
 public:
@@ -48,19 +53,38 @@ public:
 
         Point origin(x, y, z);
 
-        double dx, dy, dz;
-        std::normal_distribution<double> distributionNormal(0, 1);
-        double temp = 0.0;
-        Point direction;
-        do
+        std::uniform_real_distribution<double> distributionUniform(0, 1);
+        // Generate two random numbers
+        double u1 = distributionUniform(generator);
+        double u2 = distributionUniform(generator);
+
+        // Use u1 for cos(theta), theta is angle with the vertical (normal direction)
+        double cos_theta = sqrt(1 - u1);
+        double sin_theta = sqrt(u1); // sin(theta) = sqrt(1 - cos^2(theta))
+
+        // Use u2 for phi, phi is azimuthal angle, uniformly distributed around the circle
+        double phi = 2 * acos(-1.0) * u2;
+
+        // Convert to Cartesian coordinates
+        double dx = sin_theta * cos(phi);
+        double dy = sin_theta * sin(phi);
+        double dz = cos_theta;
+
+        Point direction(dx, dy, dz);
+
+        if (emitterNormal.z < 0.0)
         {
-            dx = distributionNormal(generator);
-            dy = distributionNormal(generator);
-            dz = distributionNormal(generator);
-            direction = Point(dx, dy, dz);
-            temp = (direction | direction);
-        } while ((direction | emitterNormal) < 0.0 || temp == 0.0);
-        direction *= 1.0 / sqrt(temp);
+            direction.z = -direction.z;
+        }
+        else
+        {
+            Point axis = emitterNormal & Point(0, 0, 1);
+            double angle = acos(Point(0, 0, 1) | emitterNormal);
+
+            Rotator rotator;
+            rotator.SetTransformation(axis, angle);
+            direction = rotator.Transform(direction);
+        }
 
         Ray ray(origin, direction);
 
