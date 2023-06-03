@@ -144,6 +144,7 @@ void Cylinder::SetupCollision(unsigned Lr, unsigned Lth, unsigned Lz)
     {
         this->collision[i] = 0u;
     }
+    this->collisionCount = 0u;
 }
 
 long long unsigned Cylinder::GetCollision()
@@ -189,8 +190,9 @@ bool Quad::Intersect(Ray &ray, double *results)
             unsigned dx = width / Lx;
             unsigned dy = height / Ly;
 
-            this->collisionCount += 1;
+            this->collisionCount += 1u;
             collision[((unsigned)(a.y / dy)) * Lx + (unsigned)(a.x / dx)] += 1u;
+            *results = rayOrigin.z;
             return true;
         }
     }
@@ -206,6 +208,7 @@ void Quad::SetupCollision(unsigned Lx, unsigned Ly)
     {
         this->collision[i] = 0u;
     }
+    collisionCount = 0u;
 }
 
 long long unsigned Quad::GetCollision()
