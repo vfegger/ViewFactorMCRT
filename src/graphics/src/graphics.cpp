@@ -166,3 +166,64 @@ void Cylinder::DeleteCollision()
         delete[] this->collision;
     }
 }
+
+bool Quad::Intersect(Ray &ray, double *results)
+{
+    Rotator rotator;
+    Point dirRotation = Point(0, 0, 1) & normal;
+    Point rayOrigin = ray.origin - center;
+    Point rayDirection = ray.direction;
+    double angleS = std::asin(std::sqrt(dirRotation | dirRotation) / sqrt(normal | normal));
+    double angleC = std::acos(normal.z / std::sqrt(normal | normal));
+    double angle = ((angleS > 0) - (angleS < 0)) * angleC;
+
+    rotator.SetTransformation(dirRotation, angle);
+    rayOrigin = rotator.Transform(rayOrigin);
+    rayDirection = rotator.Transform(rayDirection);
+
+    if (rayDirection.z < 0)
+    {
+        Point a = rayOrigin + rayOrigin.z * rayDirection;
+        if (a.x <= width / 2.0 && a.x >= -width / 2.0 && a.y <= height / 2.0 && a.y >= -height / 2.0)
+        {
+            unsigned dx = width / Lx;
+            unsigned dy = height / Ly;
+
+            this->collisionCount += 1;
+            collision[((unsigned)(a.y / dy)) * Lx + (unsigned)(a.x / dx)] += 1u;
+            return true;
+        }
+    }
+    return false;
+}
+
+void Quad::SetupCollision(unsigned Lx, unsigned Ly)
+{
+    this->Lx = Lx;
+    this->Ly = Ly;
+    this->collision = new long long unsigned[Lx * Ly];
+    for (unsigned i = 0u; i < Lx * Ly; i++)
+    {
+        this->collision[i] = 0u;
+    }
+}
+
+long long unsigned Quad::GetCollision()
+{
+    return this->collisionCount;
+}
+
+long long unsigned Quad::GetCollision(unsigned i, unsigned j)
+{
+    return this->collision[j * Lx + i];
+}
+
+void Quad::DeleteCollision()
+{
+    this->Lx = 0u;
+    this->Ly = 0u;
+    if (this->collision != NULL)
+    {
+        delete[] this->collision;
+    }
+}
