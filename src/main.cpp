@@ -123,7 +123,7 @@ void Problem(unsigned Lr, unsigned Lth, unsigned Lz, double *collisions)
 
     auto fp = std::bind(&World::View, std::ref(world), std::placeholders::_1);
 
-    long long unsigned simulationNumber = 1llu << 20llu;
+    long long unsigned simulationNumber = 1llu << 24llu;
     long long unsigned seed = 1234u;
     std::cout << "Monte Carlo Method with " << simulationNumber << " elements and seed " << seed << "\n";
     MonteCarlo monteCarlo(seed);
