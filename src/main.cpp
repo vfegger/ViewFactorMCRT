@@ -23,7 +23,7 @@ public:
 
     std::fstream fs;
 
-    bool makePoints = true;
+    bool makePoints = false;
 
     World(Point baseDirection, Point baseCenter, double baseRadius, double baseHeight, Point emitterCenter, Point emitterArea, Point emitterNormal) : base(baseDirection, baseCenter, baseRadius, baseHeight), emitterCenter(emitterCenter), emitterArea(emitterArea), emitterNormal(emitterNormal) {}
     void SetupWorld(unsigned Lr, unsigned Lth, unsigned Lz)
