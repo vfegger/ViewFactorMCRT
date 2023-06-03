@@ -184,7 +184,8 @@ bool Quad::Intersect(Ray &ray, double *results)
 
     if (rayDirection.z < 0)
     {
-        Point a = rayOrigin + rayOrigin.z * rayDirection;
+        double k = rayOrigin.z / rayDirection.z;
+        Point a = rayOrigin + k * rayDirection;
         if (a.x <= width / 2.0 && a.x >= -width / 2.0 && a.y <= height / 2.0 && a.y >= -height / 2.0)
         {
             unsigned dx = width / Lx;
@@ -192,7 +193,7 @@ bool Quad::Intersect(Ray &ray, double *results)
 
             this->collisionCount += 1u;
             collision[((unsigned)(a.y / dy)) * Lx + (unsigned)(a.x / dx)] += 1u;
-            *results = rayOrigin.z;
+            *results = k;
             return true;
         }
     }
