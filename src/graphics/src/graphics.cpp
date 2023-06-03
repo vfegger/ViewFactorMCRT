@@ -184,7 +184,7 @@ bool Quad::Intersect(Ray &ray, double *results)
 
     if (rayDirection.z < 0)
     {
-        double k = rayOrigin.z / rayDirection.z;
+        double k = - rayOrigin.z / rayDirection.z;
         Point a = rayOrigin + k * rayDirection;
         if (a.x <= width / 2.0 && a.x >= -width / 2.0 && a.y <= height / 2.0 && a.y >= -height / 2.0)
         {
